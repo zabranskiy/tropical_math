@@ -33,7 +33,6 @@ public:
 
 	double toDouble() const ;
 	TropicDouble pow(double);
-
 };
 
 class TropicMatrix {
@@ -46,6 +45,7 @@ public:
 	TropicMatrix(size_t size); // Identity Matrix
 	TropicMatrix(size_t rows, size_t cols);
 	TropicMatrix(size_t rows, size_t cols, std::string str);
+
 	const size_t getRows();
 	const size_t getCols();
 	void print();
@@ -83,15 +83,11 @@ public:
 	TropicMatrix normalize();
 	TropicMatrix normalize2();
 	TropicMatrix getX();
-	TropicMatrix exp(TropicMatrix & A);
-	void exp2(TropicMatrix & A, const int n);
-
 };
 
 TropicDouble Delta(TropicMatrix & A, TropicMatrix & b);
 double getDistance(TropicMatrix & A, TropicMatrix & B);
 void multicriterialApproximation(std::vector<TropicMatrix>matrices);
 void tropicAHP(TropicMatrix & A, std::vector<TropicMatrix>Ai);
-void standardTropicAHP(TropicMatrix & A, std::vector<TropicMatrix>Ai);
 
 #endif /* ARITHMETIC_H */

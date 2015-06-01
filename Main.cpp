@@ -153,6 +153,9 @@ int _tmain(int argc, _TCHAR* argv[]) {
 	// matrices[3].print();
 	// matrices[4].print();
 	tropicAHP(ex8, matrices);
+
+    TropicMatrix vec(4,1, "0.919 0.745 0.862 0.757");
+    vec.normalize().print();
 //	standardTropicAHP(ex8, matrices);
 
 	// TropicMatrix id2(4, 4, "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1");

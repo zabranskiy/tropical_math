@@ -288,14 +288,9 @@ TropicMatrix TropicMatrix::getKleeneStar() {
 	TropicMatrix res(mRows); // Identity Matrix
 
 	TropicMatrix tM = this->getSpectralRadius().pow(-1) * (*this);
-	// tM.print();
 	for (size_t i = 1; i <= mRows - 1; i++) {
 		res = res + tM.pow(i);
 	}
-	// TropicMatrix Ax = tM * res;
-	// tM.print();
-	// res.print();
-	// Ax.print();
 	return res;
 }
 
@@ -628,105 +623,6 @@ void tropicAHP(TropicMatrix & A, std::vector<TropicMatrix>Ai) {
 		}
 		std::cout << "Result vector:\n" << std::endl;
 		Res.normalize().print();
-	}
-}
-
-void standardTropicAHP(TropicMatrix & A, std::vector<TropicMatrix>Ai) {
-	TropicMatrix A_ = A.getMultiplicativeConjugateMatrix();
-	TropicMatrix B = A_ + A;
-	TropicMatrix B_star = B.getKleeneStar().reduce();
-	// B_star.print();
-	TropicMatrix weight_vector(B_star.getRows(), 1);
-	if (B_star.getCols() != 1) {
-		double min_val = B.getSpectralRadius().toDouble() * 10;
-		size_t min_idx = 0;
-		for (size_t i = 0; i < B_star.getCols(); i++) {
-			TropicMatrix M(B_star.getCols(), 1);
-			M.insert(i, 1.0);
-			TropicMatrix vector_x = B_star * M;
-			TropicMatrix X = vector_x.getX();
-			double num = B.getEuclideanDistance(X);
-			if (min_val > num) {
-				min_val = num;
-				min_idx = i;
-			}
-		}
-		TropicMatrix M(B_star.getCols(), 1);
-		M.insert(min_idx, 1.0);
-		weight_vector = B_star * M;
-	}
-	else {
-		weight_vector = B_star;
-	}
-	std::cout << "Weight vector:\n" << std::endl;
-	weight_vector.print();
-
-	if (!Ai.empty() && weight_vector.getRows() == Ai.size()) {
-		TropicMatrix res(Ai[0].getRows(), 1);
-		for (size_t i = 0; i < Ai.size(); i++) {
-			TropicMatrix Bi = Ai[i].getMultiplicativeConjugateMatrix() + Ai[i];
-			TropicMatrix Bi_star = Bi.getKleeneStar().reduce();
-			double min_val = Bi.getSpectralRadius().toDouble() * 10;
-			size_t min_idx = 0;
-			for (size_t j = 0; j < Bi_star.getCols(); j++) {
-				TropicMatrix M(Bi_star.getCols(), 1);
-				M.insert(j, 1.0);
-				TropicMatrix vector_x = Bi_star * M;
-				TropicMatrix X = vector_x.getX();
-				double num = Bi.getEuclideanDistance(X);
-				if (min_val > num) {
-					min_val = num;
-					min_idx = j;
-				}
-			}
-			TropicMatrix M(Bi_star.getCols(), 1);
-			M.insert(min_idx, 1.0);
-			TropicMatrix w_vector = Bi_star * M;
-			std::cout << 'A' << i + 1 << " vector:\n" << std::endl;
-			w_vector.print();
-			// sf.setMultiplicationType(ADDITION);
-			(weight_vector[i] * w_vector.normalize()).print();
-			res = res + weight_vector[i] * w_vector.normalize();
-			// sf.setMultiplicationType(MULTIPLICATION);
-		}
-		std::cout << "Result vector:\n" << std::endl;
-		res.print();
-	}
-}
-
-TropicMatrix TropicMatrix::exp(TropicMatrix & A) {
-	TropicMatrix B = *this;
-	TropicMatrix Ai = B.getKleeneStar() * (B.getKleeneStar() * A);
-	Ai.reduce().normalize().print();
-	TropicMatrix X = Ai.reduce().getX();
-	X.print();
-	double num1 = B.getEuclideanDistance(X);
-	double num2 = B.getChebyshevDistance(X);
-	double num3 = getDistance(B, X);
-	std::cout << "Euclidean distance: " << num1 << "\n";
-	std::cout << "Chebyshev distance: " << num2 << "\n";
-	std::cout << "          Distance: " << num3 << "\n" << std::endl;
-	return Ai;
-}
-
-void TropicMatrix::exp2(TropicMatrix & A, const int n) {
-	TropicMatrix B = *this;
-	B.print();
-	double radius = B.getSpectralRadius().toDouble();
-	std::cout << radius << "\n" << std::endl;
-	for (int i = 0; i < n; i++) {
-		TropicMatrix Ai = B * (B * A).getMultiplicativeConjugateMatrix();
-		Ai.isSymmetricallyReciprocal();
-		Ai.print();
-		Ai.reduce().normalize().print();
-		TropicMatrix X = Ai.reduce().getX();
-		double num1 = B.getEuclideanDistance(X);
-		double num2 = B.getChebyshevDistance(X);
-		double num3 = getDistance(B, X);
-		std::cout << "Euclidean distance: " << num1 << "\n";
-		std::cout << "Chebyshev distance: " << num2 << "\n";
-		std::cout << "          Distance: " << num3 << "\n" << std::endl;
-		A = Ai;
 	}
 }
 

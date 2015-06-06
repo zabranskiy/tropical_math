@@ -1,6 +1,9 @@
 #include "Semifield.h"
 #include <limits>
-
+/*
+  Класс идемпотентного полуполя
+  Дмитрий Забранский, 2015 г.
+*/
 using namespace std;
 
 Semifield::Semifield() {
@@ -29,6 +32,7 @@ MultiplicationType Semifield::getMultiplicationType() {
 	return m_type;
 }
 
+// Получение нейтрального элемента по сложению
 TropicDouble Semifield::getAdditionNeutralElement() {
 	double res = 0;
 	switch (a_type) {
@@ -49,7 +53,6 @@ TropicDouble Semifield::getAdditionNeutralElement() {
 			break;
 		}
 	case MIN: {
-			// ???
 			if (numeric_limits<double>::is_iec559) {
 				res = numeric_limits<double>::infinity();
 			}
@@ -67,6 +70,7 @@ TropicDouble Semifield::getAdditionNeutralElement() {
 	return neutral;
 }
 
+// Получение нейтрального элемента по умножению
 TropicDouble Semifield::getMultiplicationNeutralElement() {
 	double res = 0;
 	switch (m_type) {

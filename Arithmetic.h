@@ -1,11 +1,19 @@
+#pragma once
 #ifndef ARITHMETIC_H
 #define ARITHMETIC_H
 
 #include <vector>
+#include <cstddef>
+#include <string>
 
+/*
+  Дмитрий Забранский, 2015 г.
+*/
+
+// Класс тропического числа
 class TropicDouble {
 private:
-	double value;
+	double value; // его значение
 
 public:
 	TropicDouble() {
@@ -35,16 +43,18 @@ public:
 	TropicDouble pow(double);
 };
 
+// Класс тропической матрицы
 class TropicMatrix {
 private:
-	size_t mCols, mRows;
+	size_t mCols, mRows; // количество столбцов и строк соотвественно
 
-	std::vector<TropicDouble>mData;
+	std::vector<TropicDouble>mData; // представление матрицы
 
 public:
 	TropicMatrix(size_t size); // Identity Matrix
 	TropicMatrix(size_t rows, size_t cols);
 	TropicMatrix(size_t rows, size_t cols, std::string str);
+	~TropicMatrix();
 
 	const size_t getRows();
 	const size_t getCols();
